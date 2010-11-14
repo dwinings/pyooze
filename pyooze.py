@@ -8,6 +8,7 @@ class Main:
     black = 0, 0, 0
     white = 255, 255, 255
     red = 255,0,0
+    yellow = 0,0,255
     screen.fill(black)
     board = [[0 for i in range(0, 25)] for j in range(0,25)]
     background = pygame.sprite.RenderUpdates()
@@ -27,7 +28,6 @@ class Main:
             self.draw()
         except TypeError:
             print "wtf"
-            #secret
 
 
 def main():
