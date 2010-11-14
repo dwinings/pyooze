@@ -1,5 +1,3 @@
-#Test commit number 2
-
 from loader import Resources,pygame
 
 class Tile(pygame.sprite.Sprite):
