@@ -26,6 +26,7 @@ class Main:
             self.draw()
         except TypeError:
             print "wtf"
+            #secret
 
 
 def main():
