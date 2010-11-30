@@ -5,7 +5,7 @@ from player import *
 class Main:
     size = width, height = 640,480
     screen = pygame.display.set_mode(size)
-
+    keys = {'up': False, 'down': False, 'left': False, 'right': False}
     black = 0, 0, 0
     white = 255, 255, 255
     red = 255,0,0
@@ -27,20 +27,46 @@ class Main:
         self.background.draw(self.screen)
         self.sprites.draw(self.screen)
         pygame.display.flip()
-
-    def update(self):
+        
+    def handle_events(self):
         for event in pygame.event.get():
             if event.type == KEYDOWN:
                 if event.key == K_ESCAPE:
                     quit()
                 if event.key == K_UP:
-                    pass
+                    self.keys['up'] = True
                 if event.key == K_DOWN:
-                    pass
+                    self.keys['down'] = True
                 if event.key == K_LEFT:
-                    self.player.Move(x=-1.0)
+                    self.keys['left'] = True
                 if event.key == K_RIGHT:
-                    pass
+                    self.keys['right'] = True
+                    
+            if event.type == KEYUP:
+                if event.key == K_UP:
+                    self.keys['up'] = False
+                if event.key == K_DOWN:
+                    self.keys['down'] = False
+                if event.key == K_LEFT:
+                    self.keys['left'] = False
+                if event.key == K_RIGHT:
+                    self.keys['right'] = False
+                    
+    def handle_movement(self):
+        if self.keys['up']:
+            self.player.add_inertia(y=-self.player.speed)
+        if self.keys['down']:
+            self.player.add_inertia(y=self.player.speed)
+        if self.keys['right']:
+            self.player.add_inertia(x=self.player.speed)
+        if self.keys['left']:
+            self.player.add_inertia(x=-self.player.speed)
+        
+
+    def update(self):
+        self.handle_events()
+        self.handle_movement()
+        self.player.update_inertia()
         try:
             self.draw()
         except TypeError:
@@ -53,11 +79,6 @@ def main():
     while 1:
         main_clock.tick(30)
         thegame.update()
-
-    youlost(thegame)
-
-def youlost(a):
-    print "Hahaha"
 
 if __name__ == "__main__":
     main()
