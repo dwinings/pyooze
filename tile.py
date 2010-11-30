@@ -2,11 +2,12 @@ from loader import Resources,pygame
 import random
 
 class Tile(pygame.sprite.Sprite):
+    """This is a class terrain types will inherit from. It's not meant to be used"""    
     passable = False
 
     #Image and rect are both required by the sprite/group subsystem
     #Images are put in a list,  and randomly picked on creation
-    imageList = [Resources.defaulttex]
+    imageList = (Resources.defaulttex,)
     image = Resources.defaulttex
     
     def __init__(self, x = 0.0, y = 0.0):
@@ -19,12 +20,15 @@ class Tile(pygame.sprite.Sprite):
         return str(self.position)
     
     def pickTile(self):
-        randomPick = random.randrange(0,len(self.imageList))
-        self.image = self.imageList[randomPick]
+        self.image = random.choice(self.imageList)
 
 class Grass(Tile):
     passable = True
-    imageList = [Resources.grass1tex,Resources.grass2tex]
+    imageList = (Resources.grass1tex, Resources.grass2tex)
     
     def __init__(self, x = 0.0, y = 0.0):
         Tile.__init__(self,x,y)
+
+class Rock(Tile):
+    passable = False
+    imageList = (Resources.rock1tex, Resources.rock2tex)
