@@ -32,7 +32,9 @@ class Main:
 
 def main():
     thegame = Main()
+    main_clock = pygame.time.Clock()
     while 1:
+        main_clock.tick(30)
         thegame.update()
 
     youlost(thegame)
