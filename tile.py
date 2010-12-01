@@ -10,6 +10,7 @@ class Tile(pygame.sprite.Sprite):
     imageList = (Resources.defaulttex,)
     image = Resources.defaulttex
     
+    
     def __init__(self, x = 0.0, y = 0.0):
         self.pickTile()
         pygame.sprite.Sprite.__init__(self)

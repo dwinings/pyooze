@@ -5,7 +5,7 @@ import tile
 
 class Main:
     size = width, height = 640,480
-    screen = pygame.display.set_mode(size)
+    screen = pygame.display.set_mode(size, HWSURFACE)
     keys = {'up': False, 'down': False, 'left': False, 'right': False}
     black = 0, 0, 0
     white = 255, 255, 255
@@ -16,6 +16,7 @@ class Main:
     player = player.Player(30.0, 30.0)
     board = [[0 for i in range(0, 25)] for j in range(0,25)]
     background = pygame.sprite.RenderUpdates()
+    obstacles = pygame.sprite.RenderUpdates()
     sprites = pygame.sprite.RenderUpdates()
     mapfileparser = {
                     '0': tile.Grass,
@@ -24,6 +25,7 @@ class Main:
 
     def __init__(self):
         mapfile = open(self.mapfile, 'r') # Add Exception Handler later.
+        self.convert_textures() 
         self.sprites.add(self.player)
         x = 0
         y = 0
@@ -32,14 +34,28 @@ class Main:
             for char in line:
                 self.board[x][y] = self.mapfileparser[char](x*25.0, y*25.0)
                 self.background.add(self.board[x][y])
+                if self.board[x][y].passable == False:
+                    self.obstacles.add(self.board[x][y])
                 x += 1
             y += 1
             x = 0
     
+    def convert_textures(self):
+        Resources.grass2tex = Resources.grass2tex.convert()
+        Resources.rock1tex = Resources.rock1tex.convert()
+        Resources.rock2tex = Resources.rock1tex.convert()
+        Resources.defaulttex = Resources.defaulttex.convert()
+        Resources.dirt1tex = Resources.dirt1tex.convert()
+        Resources.playerUPtex = Resources.playerUPtex.convert()
+        Resources.playerDOWNtex = Resources.playerDOWNtex.convert()
+        Resources.playerRIGHTtex = Resources.playerRIGHTtex.convert()
+        Resources.playerLEFTtex = Resources.playerLEFTtex.convert()
+        Resources.gootex = Resources.gootex.convert()
+    
     def draw(self):
-        self.background.draw(self.screen)
+        rect_list = self.background.draw(self.screen)
         self.sprites.draw(self.screen)
-        pygame.display.flip()
+        pygame.display.update(rect_list)
         
     def handle_events(self):
         for event in pygame.event.get():
@@ -78,22 +94,26 @@ class Main:
         if self.keys['left']:
             self.player.add_inertia(x=-self.player.speed)
             self.player.rotate("left")
+            
+    def handle_collisions(self):
+        if pygame.sprite.spritecollideany(self.player, self.obstacles):
+            self.player.can_move = False
+        else: self.player.can_move = True
 
     def update(self):
         self.handle_events()
         self.handle_movement()
+        self.handle_collisions()
         self.player.update_inertia()
-        try:
-            self.draw()
-        except TypeError:
-            print "wtf"
+        self.draw()
+            
 
 
 def main():
     thegame = Main()
     main_clock = pygame.time.Clock()
     while 1:
-        main_clock.tick(30)
+        main_clock.tick(60)
         thegame.update()
 
 if __name__ == "__main__":
