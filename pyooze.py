@@ -2,6 +2,7 @@ from loader import *
 import player
 import tile
 
+
 class Main:
     size = width, height = 640,480
     screen = pygame.display.set_mode(size)
@@ -67,13 +68,16 @@ class Main:
     def handle_movement(self):
         if self.keys['up']:
             self.player.add_inertia(y=-self.player.speed)
+            self.player.rotate("up")
         if self.keys['down']:
             self.player.add_inertia(y=self.player.speed)
+            self.player.rotate("down")
         if self.keys['right']:
             self.player.add_inertia(x=self.player.speed)
+            self.player.rotate("right")
         if self.keys['left']:
             self.player.add_inertia(x=-self.player.speed)
-        
+            self.player.rotate("left")
 
     def update(self):
         self.handle_events()

@@ -11,7 +11,11 @@ class Resources:
     rock2tex = pygame.image.load("Art/rock2.png")
     defaulttex = pygame.image.load("Art/default.png")
     dirt1tex = pygame.image.load("Art/dirt1.png")
-    playertex = pygame.image.load("Art/dirt1.png")
+    playerUPtex = pygame.image.load("Art/gooup.png")
+    playerDOWNtex = pygame.image.load("Art/goodown.png")
+    playerRIGHTtex = pygame.image.load("Art/gooright.png")
+    playerLEFTtex = pygame.image.load("Art/gooleft.png")
+    gootex = pygame.image.load("Art/default.png")
 
                     
 
