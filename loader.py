@@ -1,6 +1,8 @@
 import pygame
 import sys
+
 from pygame.locals import *
+
 
 class Resources:
     grass1tex = pygame.image.load("Art/grass1.png")
@@ -10,5 +12,7 @@ class Resources:
     defaulttex = pygame.image.load("Art/default.png")
     dirt1tex = pygame.image.load("Art/dirt1.png")
     playertex = pygame.image.load("Art/dirt1.png")
+
+                    
 
 

@@ -1,4 +1,4 @@
-from loader import Resources,pygame
+from loader import *
 import random
 
 class Tile(pygame.sprite.Sprite):
@@ -32,3 +32,6 @@ class Grass(Tile):
 class Rock(Tile):
     passable = False
     imageList = (Resources.rock1tex, Resources.rock2tex)
+    
+    def __init__(self, x=0.0, y=0.0):
+        Tile.__init__(self,x,y)

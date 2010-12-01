@@ -1,6 +1,6 @@
 from loader import *
+import player
 import tile
-from player import *
 
 class Main:
     size = width, height = 640,480
@@ -11,17 +11,29 @@ class Main:
     red = 255,0,0
     yellow = 0,0,255
     screen.fill(black)
-    player = Player(30.0, 30.0)
+    mapfile = 'Maps/default.map'
+    player = player.Player(30.0, 30.0)
     board = [[0 for i in range(0, 25)] for j in range(0,25)]
     background = pygame.sprite.RenderUpdates()
     sprites = pygame.sprite.RenderUpdates()
+    mapfileparser = {
+                    '0': tile.Grass,
+                    '1': tile.Rock
+                    }
 
     def __init__(self):
+        mapfile = open(self.mapfile, 'r') # Add Exception Handler later.
         self.sprites.add(self.player)
-        for x in range(1,(self.width / 25)):
-            for y in range(1, (self.height / 25)):
-                self.board[x][y] = tile.Grass(x*25.0, y*25.0)
+        x = 0
+        y = 0
+        for line in mapfile:
+            line = line.rstrip('\n')
+            for char in line:
+                self.board[x][y] = self.mapfileparser[char](x*25.0, y*25.0)
                 self.background.add(self.board[x][y])
+                x += 1
+            y += 1
+            x = 0
     
     def draw(self):
         self.background.draw(self.screen)
