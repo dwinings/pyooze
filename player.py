@@ -13,7 +13,7 @@ class Player(pygame.sprite.Sprite):
         self.rect = self.image.get_rect(topleft=(x, y))
         self.goocount = 20
     
-    def update_inertia(self):
+    def update(self):
         if self.can_move:
             self.move()
             if self.inertia[0] < 0:
@@ -51,6 +51,8 @@ class Player(pygame.sprite.Sprite):
         else:
             self.image = self.imageList[3]
         
-
+class RectHolder():
+    def __init__(self, x, y, width, height):
+        self.rect = pygame.Rect(x, y, width, height)
     
         

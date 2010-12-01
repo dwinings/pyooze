@@ -5,6 +5,7 @@ import tile
 
 class Main:
     size = width, height = 640,480
+    fps = 60
     screen = pygame.display.set_mode(size, HWSURFACE)
     keys = {'up': False, 'down': False, 'left': False, 'right': False}
     black = 0, 0, 0
@@ -96,7 +97,12 @@ class Main:
             self.player.rotate("left")
             
     def handle_collisions(self):
-        if pygame.sprite.spritecollideany(self.player, self.obstacles):
+        if pygame.sprite.spritecollideany(
+                player.RectHolder(self.player.rect.x + self.player.inertia[0], 
+                                  self.player.rect.y + self.player.inertia[1], 
+                                  25, 
+                                  25), self.obstacles):
+
             self.player.can_move = False
         else: self.player.can_move = True
 
@@ -104,7 +110,7 @@ class Main:
         self.handle_events()
         self.handle_movement()
         self.handle_collisions()
-        self.player.update_inertia()
+        self.player.update()
         self.draw()
             
 
@@ -113,7 +119,7 @@ def main():
     thegame = Main()
     main_clock = pygame.time.Clock()
     while 1:
-        main_clock.tick(60)
+        main_clock.tick(thegame.fps)
         thegame.update()
 
 if __name__ == "__main__":
