@@ -6,7 +6,9 @@ import tile
 class Main:
     size = width, height = 640,480
     fps = 60
+    pygame.display.set_icon(Resources.playerUPtex)
     screen = pygame.display.set_mode(size, HWSURFACE)
+    
     keys = {'up': False, 'down': False, 'left': False, 'right': False}
     black = 0, 0, 0
     white = 255, 255, 255
@@ -15,7 +17,7 @@ class Main:
     screen.fill(black)
     mapfile = 'Maps/default.map'
     player = player.Player(30.0, 30.0)
-    board = [[0 for i in range(0, 25)] for j in range(0,25)]
+    board = []
     background = pygame.sprite.RenderUpdates()
     obstacles = pygame.sprite.RenderUpdates()
     sprites = pygame.sprite.RenderUpdates()
@@ -28,16 +30,21 @@ class Main:
         mapfile = open(self.mapfile, 'r') # Add Exception Handler later.
         self.convert_textures() 
         self.sprites.add(self.player)
-        x = 0
+        x= 0
         y = 0
+        temp = []
         for line in mapfile:
             line = line.rstrip('\n')
             for char in line:
-                self.board[x][y] = self.mapfileparser[char](x*25.0, y*25.0)
-                self.background.add(self.board[x][y])
-                if self.board[x][y].passable == False:
-                    self.obstacles.add(self.board[x][y])
+                tile = self.mapfileparser[char](x*25.0, y*25.0)
+                temp.append(tile)
+                self.background.add(tile)
+                if tile.passable == False:
+                    self.obstacles.add(tile)
                 x += 1
+                
+            self.board.append(temp)
+            temp = []                
             y += 1
             x = 0
     
