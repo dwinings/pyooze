@@ -11,7 +11,8 @@ class Player(pygame.sprite.Sprite):
         self.max_inertia = (10.0, 10.0)
         self.speed = (0.3)
         self.rect = self.image.get_rect(topleft=(x, y))
-        self.goocount = 20
+        self.goocount = 6
+        self.tile = (0,0)
     
     def update(self):
         if self.can_move:
@@ -40,6 +41,13 @@ class Player(pygame.sprite.Sprite):
     def move(self):
         self.rect.x += self.inertia[0]
         self.rect.y += self.inertia[1]
+        
+    def update_tile(self):
+        tile= (int((self.rect.x + 12.5) / 25), int((self.rect.y + 12.5) /25))
+        if tile != self.tile:
+            self.tile = tile
+            return tile
+        else: return False
 
     def rotate(self, direction):
         if direction == "up":

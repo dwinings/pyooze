@@ -1,32 +1,34 @@
 from loader import *
 import player
 import tile
+from collections import deque
 
 
 class Main:
     size = width, height = 640,480
     fps = 60
-    pygame.display.set_icon(Resources.playerUPtex)
-    screen = pygame.display.set_mode(size, HWSURFACE)
-    
     keys = {'up': False, 'down': False, 'left': False, 'right': False}
     black = 0, 0, 0
     white = 255, 255, 255
     red = 255,0,0
     yellow = 0,0,255
-    screen.fill(black)
+
     mapfile = 'Maps/default.map'
     player = player.Player(30.0, 30.0)
     board = []
     background = pygame.sprite.RenderUpdates()
     obstacles = pygame.sprite.RenderUpdates()
     sprites = pygame.sprite.RenderUpdates()
+    gootiles = pygame.sprite.RenderUpdates()
+    gooqueue = deque()
     mapfileparser = {
                     '0': tile.Grass,
                     '1': tile.Rock
                     }
 
     def __init__(self):
+        pygame.display.set_icon(Resources.playerUPtex)
+        self.screen = pygame.display.set_mode(self.size, HWSURFACE)
         mapfile = open(self.mapfile, 'r') # Add Exception Handler later.
         self.convert_textures() 
         self.sprites.add(self.player)
@@ -62,6 +64,7 @@ class Main:
     
     def draw(self):
         rect_list = self.background.draw(self.screen)
+        rect_list.extend(self.gootiles.draw(self.screen))
         self.sprites.draw(self.screen)
         pygame.display.update(rect_list)
         
@@ -112,11 +115,24 @@ class Main:
 
             self.player.can_move = False
         else: self.player.can_move = True
+        
+    def update_goo(self):
+        playertile = self.player.update_tile()
+        if playertile:
+            playertile = tile.Goo((playertile[0]*25), playertile[1]*25)
+        
+            self.gooqueue.append(playertile)
+            if len(self.gooqueue) > self.player.goocount:
+                self.gooqueue.popleft().kill()
+            self.gootiles.add(playertile)
+        
+        
 
     def update(self):
         self.handle_events()
         self.handle_movement()
         self.handle_collisions()
+        self.update_goo()
         self.player.update()
         self.draw()
             
