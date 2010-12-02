@@ -43,7 +43,7 @@ class Player(pygame.sprite.Sprite):
         self.rect.y += self.inertia[1]
         
     def update_tile(self):
-        tile= (int((self.rect.x + 12.5) / 25), int((self.rect.y + 12.5) /25))
+        tile= (int((self.rect.x + 12.5) / 22), int((self.rect.y + 12.5) /22))#changed to new size if this causes problems change it back from 22 to 25
         if tile != self.tile:
             self.tile = tile
             return tile

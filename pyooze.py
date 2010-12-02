@@ -119,7 +119,7 @@ class Main:
     def update_goo(self):
         playertile = self.player.update_tile()
         if playertile:
-            playertile = tile.Goo((playertile[0]*25), playertile[1]*25)
+            playertile = tile.Goo((playertile[0]*22), playertile[1]*22)#changed to new size
         
             self.gooqueue.append(playertile)
             if len(self.gooqueue) > self.player.goocount:
