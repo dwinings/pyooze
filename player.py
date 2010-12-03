@@ -13,6 +13,7 @@ class Player(pygame.sprite.Sprite):
         self.rect = self.image.get_rect(topleft=(x, y))
         self.goocount = 6
         self.tile = (0,0)
+        self.direction = "up"
     
     def update(self):
         if self.can_move:
@@ -43,7 +44,7 @@ class Player(pygame.sprite.Sprite):
         self.rect.y += self.inertia[1]
         
     def update_tile(self):
-        tile= (int((self.rect.x + 12.5) / 22), int((self.rect.y + 12.5) /22))#changed to new size if this causes problems change it back from 22 to 25
+        tile= (int((self.rect.x + 12.5) / 25), int((self.rect.y + 12.5) /25))
         if tile != self.tile:
             self.tile = tile
             return tile
@@ -52,12 +53,16 @@ class Player(pygame.sprite.Sprite):
     def rotate(self, direction):
         if direction == "up":
             self.image = self.imageList[0]
+            self.direction = "up"
         elif direction == "down":
             self.image = self.imageList[1]
+            self.direction = "down"
         elif direction == "left":
             self.image = self.imageList[2]
+            self.direction = "left"
         else:
             self.image = self.imageList[3]
+            self.direction = "right"
         
 class RectHolder():
     def __init__(self, x, y, width, height):

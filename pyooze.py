@@ -1,6 +1,7 @@
 from loader import *
 import player
 import tile
+import projectile
 from collections import deque
 
 
@@ -20,6 +21,7 @@ class Main:
     obstacles = pygame.sprite.RenderUpdates()
     sprites = pygame.sprite.RenderUpdates()
     gootiles = pygame.sprite.RenderUpdates()
+    projectiles = pygame.sprite.RenderUpdates()
     gooqueue = deque()
     mapfileparser = {
                     '0': tile.Grass,
@@ -61,11 +63,13 @@ class Main:
         Resources.playerRIGHTtex = Resources.playerRIGHTtex.convert()
         Resources.playerLEFTtex = Resources.playerLEFTtex.convert()
         Resources.gootex = Resources.gootex.convert()
+        Resources.blob1tex = Resources.blob1tex.convert()
     
     def draw(self):
         rect_list = self.background.draw(self.screen)
         rect_list.extend(self.gootiles.draw(self.screen))
         self.sprites.draw(self.screen)
+        self.projectiles.draw(self.screen)
         pygame.display.update(rect_list)
         
     def handle_events(self):
@@ -81,6 +85,13 @@ class Main:
                     self.keys['left'] = True
                 if event.key == K_RIGHT:
                     self.keys['right'] = True
+                if event.key == K_SPACE:
+                    blob = projectile.Projectile(self.player.rect.x,
+                                                 self.player.rect.y,
+                                                 self.player.direction ,
+                                                 self.player.inertia[0] ,
+                                                 self.player.inertia[1] )
+                    self.projectiles.add(blob)
                     
             if event.type == KEYUP:
                 if event.key == K_UP:
@@ -93,6 +104,7 @@ class Main:
                     self.keys['right'] = False
                     
     def handle_movement(self):
+        """for the player"""
         if self.keys['up']:
             self.player.add_inertia(y=-self.player.speed)
             self.player.rotate("up")
@@ -105,8 +117,12 @@ class Main:
         if self.keys['left']:
             self.player.add_inertia(x=-self.player.speed)
             self.player.rotate("left")
+        """for projectiles"""
+        for x in self.projectiles.sprites():
+            x.move()
             
     def handle_collisions(self):
+        """for the player"""
         if pygame.sprite.spritecollideany(
                 player.RectHolder(self.player.rect.x + self.player.inertia[0], 
                                   self.player.rect.y + self.player.inertia[1], 
@@ -115,12 +131,21 @@ class Main:
 
             self.player.can_move = False
         else: self.player.can_move = True
+        """for the projectiles""" #not yet implemented
+#        for i in self.projectiles.sprites():
+#            if pygame.sprite.spritecollideany(
+#                    projectile.RectHolder(i.rect.x + i.speed, 
+#                                          i.y + i.speed, 
+#                                          25, 
+#                                          25), self.obstacles):
+#
+#                i.can_move = False
+#            else: i.can_move = True
         
     def update_goo(self):
         playertile = self.player.update_tile()
         if playertile:
-            playertile = tile.Goo((playertile[0]*22), playertile[1]*22)#changed to new size
-        
+            playertile = tile.Goo((playertile[0]*25), playertile[1]*25)        
             self.gooqueue.append(playertile)
             if len(self.gooqueue) > self.player.goocount:
                 self.gooqueue.popleft().kill()

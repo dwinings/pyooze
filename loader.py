@@ -15,6 +15,7 @@ class Resources:
     playerRIGHTtex = pygame.image.load("Art/gooright.png")
     playerLEFTtex = pygame.image.load("Art/gooleft.png")
     gootex = pygame.image.load("Art/default.png")
+    blob1tex = pygame.image.load("Art/blob1.png")
 
                     
 
