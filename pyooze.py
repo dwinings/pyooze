@@ -88,9 +88,7 @@ class Main:
                 if event.key == K_SPACE:
                     blob = projectile.Projectile(self.player.rect.x,
                                                  self.player.rect.y,
-                                                 self.player.direction ,
-                                                 self.player.inertia[0] ,
-                                                 self.player.inertia[1] )
+                                                 self.player.direction )
                     self.projectiles.add(blob)
                     
             if event.type == KEYUP:
@@ -104,7 +102,7 @@ class Main:
                     self.keys['right'] = False
                     
     def handle_movement(self):
-        """for the player"""
+        #for the player
         if self.keys['up']:
             self.player.add_inertia(y=-self.player.speed)
             self.player.rotate("up")
@@ -117,9 +115,9 @@ class Main:
         if self.keys['left']:
             self.player.add_inertia(x=-self.player.speed)
             self.player.rotate("left")
-        """for projectiles"""
+        #for projectiles
         for x in self.projectiles.sprites():
-            x.move()
+            x.update()
             
     def handle_collisions(self):
         """for the player"""
@@ -131,16 +129,16 @@ class Main:
 
             self.player.can_move = False
         else: self.player.can_move = True
-        """for the projectiles""" #not yet implemented
-#        for i in self.projectiles.sprites():
-#            if pygame.sprite.spritecollideany(
-#                    projectile.RectHolder(i.rect.x + i.speed, 
-#                                          i.y + i.speed, 
-#                                          25, 
-#                                          25), self.obstacles):
-#
-#                i.can_move = False
-#            else: i.can_move = True
+        #for the projectiles
+        for proj in self.projectiles.sprites():
+            if pygame.sprite.spritecollideany(
+                    player.RectHolder(proj.rect.x + (proj.speed[0])/2.0, 
+                                          proj.rect.y + (proj.speed[1])/2.0, 
+                                          10, 
+                                          10), self.obstacles):
+
+                proj.kill()
+            else: pass
         
     def update_goo(self):
         playertile = self.player.update_tile()
