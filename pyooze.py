@@ -86,9 +86,9 @@ class Main:
                 if event.key == K_RIGHT:
                     self.keys['right'] = True
                 if event.key == K_SPACE:
-                    blob = projectile.Projectile(self.player.rect.x,
+                    blob = projectile.SmallBlob(self.player.rect.x,
                                                  self.player.rect.y,
-                                                 self.player.direction )
+                                                 self.player.direction)
                     self.projectiles.add(blob)
                     
             if event.type == KEYUP:
